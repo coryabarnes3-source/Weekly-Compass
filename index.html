@@ -316,90 +316,107 @@ function renderHeader() {
   });
 }
 
-// ── SYNC CONFIG ───────────────────────────────────────────────────────────────
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTaTFQ6A8vTtPIwgpoSmyyBiZEGw_YlgqvFg22NwfURmpczMakQYkV8H9EDJKHMuLWww/exec';
-let syncQueue = JSON.parse(localStorage.getItem('wc_syncQueue') || '[]');
-let isSyncing = false;
+// ── JSONBIN SYNC CONFIG ───────────────────────────────────────────────────────
+const BIN_ID    = '69e64707aaba8821971bfbcc';
+const MASTER_KEY = '$2a$10$tPxPwK3CfBx1eP1MEqOYAO5XH0h640CPm9klAAVAjqueJAkmRISm.';
+const BIN_URL   = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+let isSyncing   = false;
+let pendingSave = false;
+let saveTimer   = null;
 
 // ── STORAGE ───────────────────────────────────────────────────────────────────
 function getCount(id)   { return parseInt(localStorage.getItem(`wc_${dayKey()}_${id}`)||'0'); }
 function setCount(id,v) {
   localStorage.setItem(`wc_${dayKey()}_${id}`, v);
-  queueSync({ action:'save', week:weekKey(), day:dayKey(), itemId:id, value:v });
   saved();
+  schedulePush();
 }
 function weekTotal(id)  { let t=0; for(let i=0;i<5;i++){const k=`wc_${iso(dayDate(i))}_${id}`;t+=parseInt(localStorage.getItem(k)||'0');} return t; }
 
 function saved() {
   const el=document.getElementById('saveIndicator');
   el.textContent='Saving…'; clearTimeout(el._t);
-  el._t=setTimeout(()=>{ el.textContent='Saved'; processQueue(); }, 700);
+  el._t=setTimeout(()=>el.textContent='Saved', 700);
 }
 
-// ── SYNC QUEUE ────────────────────────────────────────────────────────────────
-function queueSync(payload) {
-  // Deduplicate — if same week/day/itemId already queued, replace it
-  syncQueue = syncQueue.filter(q => !(q.week===payload.week && q.day===payload.day && q.itemId===payload.itemId));
-  syncQueue.push(payload);
-  localStorage.setItem('wc_syncQueue', JSON.stringify(syncQueue));
-}
+// ── JSONBIN HELPERS ───────────────────────────────────────────────────────────
 
-async function processQueue() {
-  if (isSyncing || syncQueue.length === 0 || !navigator.onLine) return;
-  isSyncing = true;
-  const el = document.getElementById('saveIndicator');
-
-  while (syncQueue.length > 0) {
-    const payload = syncQueue[0];
-    try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST', mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      syncQueue.shift();
-      localStorage.setItem('wc_syncQueue', JSON.stringify(syncQueue));
-    } catch(err) {
-      break; // offline, stop and retry later
+// Collect all wc_ keys from localStorage into one object to push
+function buildSyncPayload() {
+  const payload = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith('wc_')) {
+      payload[key] = localStorage.getItem(key);
     }
   }
-
-  isSyncing = false;
-  el.textContent = syncQueue.length > 0 ? `⚠ ${syncQueue.length} unsynced` : '✓ Synced';
-  clearTimeout(el._st);
-  el._st = setTimeout(() => el.textContent = 'Saved', 2500);
+  return payload;
 }
 
-// Sync when app comes back online
-window.addEventListener('online', () => {
-  document.getElementById('saveIndicator').textContent = 'Syncing…';
-  processQueue();
-});
+// Debounce pushes — wait 1.5s after last tap before writing to JSONBin
+function schedulePush() {
+  pendingSave = true;
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => pushToJSONBin(), 1500);
+}
 
-// Pull latest data from Sheet on load
-async function pullFromSheet() {
+async function pushToJSONBin() {
+  if (isSyncing || !navigator.onLine) return;
+  isSyncing = true;
+  const el = document.getElementById('saveIndicator');
+  el.textContent = 'Syncing…';
+  try {
+    const payload = buildSyncPayload();
+    await fetch(BIN_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': MASTER_KEY
+      },
+      body: JSON.stringify(payload)
+    });
+    pendingSave = false;
+    el.textContent = '✓ Synced';
+    clearTimeout(el._st);
+    el._st = setTimeout(() => el.textContent = 'Saved', 2000);
+  } catch(err) {
+    el.textContent = '⚠ Sync failed';
+    clearTimeout(el._st);
+    el._st = setTimeout(() => el.textContent = 'Saved', 2000);
+  }
+  isSyncing = false;
+}
+
+async function pullFromJSONBin() {
   if (!navigator.onLine) return;
   const el = document.getElementById('saveIndicator');
   el.textContent = 'Syncing…';
   try {
-    const res = await fetch(SCRIPT_URL + '?t=' + Date.now());
-    const data = await res.json();
-    data.forEach(row => {
-      if (row.itemId === 'wins') {
-        localStorage.setItem(`wc_wins_${row.week}`, row.value);
-      } else if (row.itemId === 'losses') {
-        localStorage.setItem(`wc_losses_${row.week}`, row.value);
-      } else if (row.day && row.itemId) {
-        localStorage.setItem(`wc_${row.day}_${row.itemId}`, row.value);
+    const res = await fetch(BIN_URL + '/latest', {
+      headers: { 'X-Master-Key': MASTER_KEY }
+    });
+    const json = await res.json();
+    const data = json.record || {};
+    // Write all keys from the bin into localStorage
+    Object.keys(data).forEach(key => {
+      if (key.startsWith('wc_')) {
+        localStorage.setItem(key, data[key]);
       }
     });
     el.textContent = '✓ Synced';
-    setTimeout(() => el.textContent = 'Saved', 1500);
+    clearTimeout(el._st);
+    el._st = setTimeout(() => el.textContent = 'Saved', 1500);
   } catch(err) {
     el.textContent = 'Offline';
-    setTimeout(() => el.textContent = 'Saved', 1500);
+    clearTimeout(el._st);
+    el._st = setTimeout(() => el.textContent = 'Saved', 1500);
   }
 }
+
+// Retry push when back online
+window.addEventListener('online', () => {
+  if (pendingSave) pushToJSONBin();
+});
 
 // ── LOG ───────────────────────────────────────────────────────────────────────
 function renderLog() {
@@ -559,8 +576,8 @@ function saveWins() {
   const losses = document.getElementById('lossesText').value;
   localStorage.setItem(`wc_wins_${weekKey()}`,   wins);
   localStorage.setItem(`wc_losses_${weekKey()}`, losses);
-  queueSync({ action:'saveWins', week:weekKey(), wins, losses });
   saved();
+  schedulePush();
 }
 function loadWins() {
   document.getElementById('winsText').value   = localStorage.getItem(`wc_wins_${weekKey()}`)   || '';
@@ -583,7 +600,7 @@ function installApp() { alert('To install: tap the Share button (□↑) in Safa
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderHeader();
-pullFromSheet().then(() => { renderLog(); processQueue(); });
+pullFromJSONBin().then(() => renderLog());
 </script>
 </body>
 </html>
