@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +13,8 @@
     --gray-400: #9CA3AF; --gray-500: #6B7280; --gray-700: #374151; --gray-900: #111827;
     --green: #16A34A; --green-light: #DCFCE7;
     --red: #DC2626; --red-light: #FEE2E2;
+    --amber: #D97706; --amber-light: #FEF3C7;
+    --purple: #7C3AED; --purple-light: #EDE9FE;
     --radius: 12px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -26,7 +29,7 @@
   .week-nav button:active { background: var(--gray-100); }
   .week-label { font-size: 13px; font-weight: 500; color: var(--gray-700); white-space: nowrap; }
 
-  /* DAY STRIP — Mon–Fri only */
+  /* DAY STRIP */
   .day-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding-bottom: 12px; }
   .day-btn { display: flex; flex-direction: column; align-items: center; padding: 6px 2px; border-radius: 10px; border: none; background: transparent; cursor: pointer; transition: background 0.15s; }
   .day-btn.active { background: var(--blue); }
@@ -57,7 +60,7 @@
   .section-label { font-size: 11px; font-weight: 600; color: var(--gray-400); letter-spacing: 1px; text-transform: uppercase; margin: 20px 0 8px 4px; }
   .section-label:first-child { margin-top: 0; }
 
-  /* GOAL ROW */
+  /* STANDARD GOAL ROW */
   .goal-row { background: #fff; border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: center; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); gap: 12px; }
   .goal-info { flex: 1; min-width: 0; }
   .goal-name { font-size: 15px; font-weight: 400; }
@@ -70,6 +73,35 @@
   .counter-btn:active { background: var(--gray-100); transform: scale(0.95); }
   .counter-val { font-size: 18px; font-weight: 700; min-width: 24px; text-align: center; }
   .counter-val.complete { color: var(--green); }
+
+  /* TRACK ROW (Results — no goal, just count) */
+  .track-row { background: #fff; border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: center; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); gap: 12px; }
+  .track-info { flex: 1; min-width: 0; }
+  .track-name { font-size: 15px; font-weight: 400; }
+  .track-meta { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+  .track-val { font-size: 22px; font-weight: 700; color: var(--blue); min-width: 24px; text-align: center; }
+
+  /* MONTHLY BADGE */
+  .badge-monthly { display: inline-block; font-size: 10px; font-weight: 600; color: var(--purple); background: var(--purple-light); border-radius: 20px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; }
+
+  /* LEVERAGE ROW */
+  .leverage-row { background: #fff; border-radius: var(--radius); padding: 16px; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .leverage-label { font-size: 15px; font-weight: 400; margin-bottom: 10px; }
+  .leverage-sub { font-size: 11px; color: var(--gray-400); margin-bottom: 12px; }
+  .toggle-group { display: flex; gap: 8px; }
+  .toggle-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid var(--gray-200); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--gray-500); cursor: pointer; transition: all 0.15s; text-align: center; }
+  .toggle-btn.selected-yes  { background: var(--green-light);  border-color: var(--green);  color: var(--green);  }
+  .toggle-btn.selected-no   { background: var(--red-light);    border-color: var(--red);    color: var(--red);    }
+  .toggle-btn.selected-na   { background: var(--gray-100);     border-color: var(--gray-300); color: var(--gray-500); }
+
+  /* SUNDAY WORK ROW */
+  .sunday-row { background: #fff; border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: center; margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); gap: 12px; }
+  .sunday-info { flex: 1; }
+  .sunday-name { font-size: 15px; font-weight: 400; }
+  .sunday-meta { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+  .sunday-val { font-size: 18px; font-weight: 700; min-width: 24px; text-align: center; }
+  .sunday-val.zero { color: var(--green); }
+  .sunday-val.nonzero { color: var(--red); }
 
   /* CALLS TAB */
   .calls-total-card { background: var(--blue); border-radius: var(--radius); padding: 16px; text-align: center; margin-bottom: 16px; color: #fff; }
@@ -86,11 +118,6 @@
   .call-tile-name { font-size: 10px; color: var(--blue); margin-top: 3px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* SUMMARY TAB */
-  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .kpi-card { background: #fff; border-radius: var(--radius); padding: 14px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
-  .kpi-label { font-size: 12px; color: var(--gray-400); margin-bottom: 4px; }
-  .kpi-value { font-size: 32px; font-weight: 700; line-height: 1; }
-  .kpi-goal  { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
   .summary-card { background: #fff; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
   .summary-title { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
   .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--gray-100); font-size: 14px; }
@@ -101,6 +128,11 @@
   .summary-goal  { font-size: 12px; color: var(--gray-400); }
   .pct-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; min-width: 42px; text-align: center; background: var(--red-light); color: var(--red); }
   .pct-badge.good { background: var(--green-light); color: var(--green); }
+  .track-badge { font-size: 13px; font-weight: 700; color: var(--blue); }
+
+  /* 90-DAY INTENT BANNER */
+  .intent-banner { background: var(--blue-light); border-radius: var(--radius); padding: 14px 16px; font-size: 13px; color: var(--blue); line-height: 1.6; margin-bottom: 16px; }
+  .intent-banner strong { display: block; font-weight: 600; margin-bottom: 4px; font-size: 14px; }
 
   /* EMAIL BUTTON */
   .email-btn-wrap { display: none; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; padding: 12px 16px 30px; background: linear-gradient(to top, #F5F6FA 65%, transparent); z-index: 200; }
@@ -109,12 +141,12 @@
   .email-sub-note { text-align: center; font-size: 11px; color: var(--gray-400); margin-top: 6px; }
 
   /* WINS TAB */
-  .theme-day-note { background: var(--blue-light); border-radius: var(--radius); padding: 14px 16px; font-size: 13px; color: var(--blue); line-height: 1.7; margin-bottom: 12px; }
-  .theme-day-note strong { display: block; margin-bottom: 4px; font-weight: 600; }
   .wins-input-area { background: #fff; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
   .wins-label { font-size: 11px; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-  .wins-textarea { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 10px 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--gray-900); resize: none; outline: none; min-height: 90px; transition: border-color 0.15s; }
+  .wins-textarea { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 10px 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--gray-900); resize: none; outline: none; min-height: 80px; transition: border-color 0.15s; }
   .wins-textarea:focus { border-color: var(--blue); }
+  .wins-single { width: 100%; border: 1.5px solid var(--gray-200); border-radius: 8px; padding: 10px 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--gray-900); outline: none; transition: border-color 0.15s; }
+  .wins-single:focus { border-color: var(--blue); }
 
   /* SAVE INDICATOR */
   .save-indicator { position: fixed; top: 12px; right: 16px; font-size: 12px; color: var(--gray-400); z-index: 300; }
@@ -169,47 +201,86 @@
 
 <div class="content">
 
+  <!-- LOG TAB -->
   <div class="tab-content active" id="tab-log">
-    <div class="section-label">Morning</div>
-    <div id="morning-container"></div>
-    <div class="section-label">Actions</div>
+
+    <div class="section-label">Foundation</div>
+    <div id="foundation-container"></div>
+
+    <div class="section-label">High-Value Actions</div>
     <div id="actions-container"></div>
-    <div class="section-label">Results</div>
+
+    <div class="section-label">Results <span style="font-size:10px;font-weight:400;color:var(--gray-400);text-transform:none;letter-spacing:0;">— tracking only</span></div>
     <div id="results-container"></div>
+
+    <div class="section-label">Leverage</div>
+
+    <!-- Leverage Win -->
+    <div class="leverage-row">
+      <div class="leverage-label">Leverage Win</div>
+      <div class="leverage-sub">Did you create leverage today? (delegation, automation, system)</div>
+      <div class="toggle-group">
+        <button class="toggle-btn" id="lev-yes" onclick="setLeverage('yes')">✓ Yes</button>
+        <button class="toggle-btn" id="lev-no"  onclick="setLeverage('no')">✗ No</button>
+        <button class="toggle-btn" id="lev-na"  onclick="setLeverage('na')">— N/A</button>
+      </div>
+    </div>
+
+    <!-- Sunday Work -->
+    <div class="sunday-row">
+      <div class="sunday-info">
+        <div class="sunday-name">Sunday Work</div>
+        <div class="sunday-meta">Target: 0 · Green = protected day off</div>
+      </div>
+      <div class="counter">
+        <button class="counter-btn" onclick="adjSunday(-1)">−</button>
+        <span class="sunday-val" id="sunday-val">0</span>
+        <button class="counter-btn" onclick="adjSunday(1)">+</button>
+      </div>
+    </div>
 
   </div>
 
+  <!-- CALLS TAB -->
   <div class="tab-content" id="tab-calls">
     <div class="calls-total-card">
       <div class="calls-total-num" id="callsTotal">0</div>
-      <div class="calls-total-label">Calls Logged Today</div>
-      <div class="calls-goal-note">Weekly Goal: 40</div>
+      <div class="calls-total-label">Proactive Calls Today</div>
+      <div class="calls-goal-note">Relationship & Pipeline Calls</div>
     </div>
     <p class="calls-header" id="callsHeader">Mon call log — tap a number to log a name</p>
     <div class="calls-grid" id="callsGrid"></div>
   </div>
 
+  <!-- SUMMARY TAB -->
   <div class="tab-content" id="tab-summary">
-    <div class="kpi-grid" id="kpiGrid"></div>
-    <div class="summary-card" id="sum-morning"><div class="summary-title">Morning</div></div>
-    <div class="summary-card" id="sum-actions"><div class="summary-title">Actions</div></div>
+    <div class="intent-banner">
+      <strong>🧭 90-Day Intent</strong>
+      Replace volume-based tracking with a simpler scorecard focused on high-value relationship activity, proactive client care, consistent content, and measurable results.
+    </div>
+    <div class="summary-card" id="sum-foundation"><div class="summary-title">Foundation</div></div>
+    <div class="summary-card" id="sum-actions"><div class="summary-title">High-Value Actions</div></div>
     <div class="summary-card" id="sum-results"><div class="summary-title">Results</div></div>
-
+    <div class="summary-card" id="sum-leverage"><div class="summary-title">Leverage</div></div>
   </div>
 
+  <!-- WINS TAB -->
   <div class="tab-content" id="tab-wins">
-    <div class="theme-day-note">
-      <strong>📞 Call Theme Days</strong>
-      Mon – Status &nbsp;|&nbsp; Tue – New Agents &nbsp;|&nbsp; Wed – Leads<br>
-      Thu – PCs &nbsp;|&nbsp; Fri – Circle of 12/72
+    <div class="wins-input-area">
+      <div class="wins-label">Biggest Win</div>
+      <input class="wins-single" type="text" id="biggestWin" placeholder="What was your biggest win this week?" oninput="saveWins()">
     </div>
     <div class="wins-input-area">
-      <div class="wins-label">Wins This Week</div>
-      <textarea class="wins-textarea" id="winsText" placeholder="Write your wins here..." oninput="saveWins()"></textarea>
+      <div class="wins-label">What Created Business / Value?</div>
+      <textarea class="wins-textarea" id="createdValue" placeholder="What actions or relationships moved the needle?" oninput="saveWins()"></textarea>
     </div>
     <div class="wins-input-area">
-      <div class="wins-label">Losses &amp; Lessons</div>
-      <textarea class="wins-textarea" id="lossesText" placeholder="What can you improve next week?" oninput="saveWins()"></textarea>
+      <div class="wins-label">Eliminate, Delegate, or Automate?</div>
+      <textarea class="wins-textarea" id="eliminateText" placeholder="What should you stop doing, hand off, or systematize?" oninput="saveWins()"></textarea>
+    </div>
+    <div class="wins-input-area">
+      <div class="wins-label">Adjustment for Next Week</div>
+      <input class="wins-single" type="text" id="nextWeekAdj" placeholder="One thing you'll do differently..." oninput="saveWins()">
     </div>
   </div>
 
@@ -242,257 +313,235 @@
 </div>
 
 <script>
-// ── SECTIONS & GOALS ──────────────────────────────────────────────────────────
-const SECTIONS = {
-  morning: {
-    containerId: 'morning-container', summaryId: 'sum-morning',
-    items: [
-      { id: 'morning_routine', name: 'Morning Routine',  goal: 5 },
-      { id: 'workout',         name: 'Workout',           goal: 5 },
-      { id: 'team_meeting',    name: 'Team Meeting',      goal: 2 },
-    ]
-  },
-  actions: {
-    containerId: 'actions-container', summaryId: 'sum-actions',
-    items: [
-      { id: 'break_bread',      name: 'Break Bread',            goal: 2  },
-      { id: 'referral_f2f',     name: 'Referral Partner F2F',   goal: 3  },
-      { id: 'daily_calls',      name: 'Daily Phone Calls',      goal: 40 },
-      { id: 'videos',           name: 'Videos (# Created)',     goal: 2  },
-      { id: 'hours_prospected', name: 'Hours Prospected',       goal: 8  },
-      { id: 'cards_mailed',     name: 'Personal Cards Mailed',  goal: 10 },
-    ]
-  },
-  results: {
-    containerId: 'results-container', summaryId: 'sum-results',
-    items: [
-      { id: 'new_leads',    name: 'New Leads',             goal: 13 },
-      { id: 'app_credit',   name: 'Application & Credit',  goal: 8  },
-      { id: 'loan_consult', name: 'Loan Consultation',     goal: 5  },
-      { id: 'locks',        name: 'Locks',                 goal: 3  },
-    ]
-  }
-};
+// ── SECTIONS ──────────────────────────────────────────────────────────────────
+const FOUNDATION = [
+  { id: 'devotion', name: 'Devotion',      goal: 5 },
+  { id: 'workout',  name: 'Workout',       goal: 5 },
+  { id: 'team_mtg', name: 'Team Meetings', goal: 2 },
+];
 
-const KPI_IDS    = ['new_leads', 'locks'];
-const DAY_NAMES  = ['Mon','Tue','Wed','Thu','Fri'];
+const ACTIONS = [
+  { id: 'pipeline_comm', name: 'Proactive Pipeline Communication', goal: 1,  monthly: false },
+  { id: 'rel_hours',     name: 'Relationship & Opportunity Hours', goal: 4,  monthly: false },
+  { id: 'rel_advanced',  name: 'Meaningful Relationships / Opportunities Advanced', goal: 12, monthly: false },
+  { id: 'content',       name: 'Content Published',               goal: 1,  monthly: false },
+  { id: 'value_drop',    name: 'Value Drop',                      goal: 1,  monthly: true  },
+  { id: 'strat_sprint',  name: 'Strategic Expansion Sprint',      goal: 1,  monthly: true  },
+];
+
+const RESULTS = [
+  { id: 'new_leads',     name: 'New Leads'           },
+  { id: 'app_credit',    name: 'Application & Credit'},
+  { id: 'loan_consult',  name: 'Loan Consultations'  },
+  { id: 'preapprovals',  name: 'Preapprovals'        },
+  { id: 'new_contracts', name: 'New Contracts / Locks'},
+  { id: 'closed_loans',  name: 'Closed Loans'        },
+  { id: 'closed_vol',    name: 'Closed Volume ($K)'  },
+];
+
+const DAY_NAMES = ['Mon','Tue','Wed','Thu','Fri'];
 
 // ── STATE ─────────────────────────────────────────────────────────────────────
 let weekOffset = 0;
-let selIdx = (() => { const d = new Date().getDay(); return (d>=1&&d<=5) ? d-1 : 0; })();
+let selIdx = (() => { const d = new Date().getDay(); return (d>=1&&d<=5)?d-1:0; })();
 
 // ── DATE HELPERS ──────────────────────────────────────────────────────────────
 function getMonday(off=0) {
-  const t = new Date(); const day = t.getDay();
-  const mon = new Date(t); mon.setDate(t.getDate() - day + (day===0?-6:1) + off*7);
+  const t=new Date(), day=t.getDay();
+  const mon=new Date(t); mon.setDate(t.getDate()-day+(day===0?-6:1)+off*7);
   mon.setHours(0,0,0,0); return mon;
 }
-function dayDate(idx) { const d = new Date(getMonday(weekOffset)); d.setDate(d.getDate()+idx); return d; }
+function dayDate(idx) { const d=new Date(getMonday(weekOffset)); d.setDate(d.getDate()+idx); return d; }
 function iso(d)    { return d.toISOString().slice(0,10); }
 function fmt(d)    { return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
 function dayKey()  { return iso(dayDate(selIdx)); }
 function weekKey() { return iso(getMonday(weekOffset)); }
 
 function changeWeek(dir) {
-  weekOffset += dir;
-  renderHeader(); renderLog();
-  if (document.getElementById('tab-summary').classList.contains('active')) renderSummary();
+  weekOffset+=dir; renderHeader(); renderLog();
+  if(document.getElementById('tab-summary').classList.contains('active')) renderSummary();
   loadWins();
 }
 
 // ── HEADER ────────────────────────────────────────────────────────────────────
 function renderHeader() {
   const mon=getMonday(weekOffset), fri=dayDate(4);
-  document.getElementById('weekLabel').textContent = `${fmt(mon)} – ${fmt(fri)}`;
-  const strip = document.getElementById('dayStrip');
-  strip.innerHTML = '';
-  DAY_NAMES.forEach((n,i) => {
-    const d = dayDate(i);
-    const b = document.createElement('button');
-    b.className = 'day-btn'+(i===selIdx?' active':'');
-    b.innerHTML = `<span class="day-name">${n}</span><span class="day-num">${d.getDate()}</span>`;
-    b.onclick = () => { selIdx=i; renderHeader(); renderLog(); updateCallsHeader(); };
+  document.getElementById('weekLabel').textContent=`${fmt(mon)} – ${fmt(fri)}`;
+  const strip=document.getElementById('dayStrip'); strip.innerHTML='';
+  DAY_NAMES.forEach((n,i)=>{
+    const d=dayDate(i), b=document.createElement('button');
+    b.className='day-btn'+(i===selIdx?' active':'');
+    b.innerHTML=`<span class="day-name">${n}</span><span class="day-num">${d.getDate()}</span>`;
+    b.onclick=()=>{ selIdx=i; renderHeader(); renderLog(); updateCallsHeader(); };
     strip.appendChild(b);
   });
 }
 
-// ── JSONBIN SYNC CONFIG ───────────────────────────────────────────────────────
-const BIN_ID    = '69e64707aaba8821971bfbcc';
+// ── JSONBIN SYNC ──────────────────────────────────────────────────────────────
+const BIN_ID     = '69e64707aaba8821971bfbcc';
 const MASTER_KEY = '$2a$10$tPxPwK3CfBx1eP1MEqOYAO5XH0h640CPm9klAAVAjqueJAkmRISm.';
-const BIN_URL   = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-let isSyncing   = false;
-let pendingSave = false;
-let saveTimer   = null;
+const BIN_URL    = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+let isSyncing=false, pendingSave=false, saveTimer=null;
 
-// ── STORAGE ───────────────────────────────────────────────────────────────────
 function getCount(id)   { return parseInt(localStorage.getItem(`wc_${dayKey()}_${id}`)||'0'); }
-function setCount(id,v) {
-  localStorage.setItem(`wc_${dayKey()}_${id}`, v);
-  saved();
-  schedulePush();
-}
+function setCount(id,v) { localStorage.setItem(`wc_${dayKey()}_${id}`,v); saved(); schedulePush(); }
 function weekTotal(id)  { let t=0; for(let i=0;i<5;i++){const k=`wc_${iso(dayDate(i))}_${id}`;t+=parseInt(localStorage.getItem(k)||'0');} return t; }
 
 function saved() {
   const el=document.getElementById('saveIndicator');
   el.textContent='Saving…'; clearTimeout(el._t);
-  el._t=setTimeout(()=>el.textContent='Saved', 700);
+  el._t=setTimeout(()=>el.textContent='Saved',700);
 }
-
-// ── JSONBIN HELPERS ───────────────────────────────────────────────────────────
-
-// Collect all wc_ keys from localStorage into one object to push
 function buildSyncPayload() {
-  const payload = {};
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith('wc_')) {
-      payload[key] = localStorage.getItem(key);
-    }
-  }
-  return payload;
+  const p={}; for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i); if(k&&k.startsWith('wc_'))p[k]=localStorage.getItem(k);} return p;
 }
-
-// Debounce pushes — wait 1.5s after last tap before writing to JSONBin
-function schedulePush() {
-  pendingSave = true;
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(() => pushToJSONBin(), 1500);
-}
-
+function schedulePush() { pendingSave=true; clearTimeout(saveTimer); saveTimer=setTimeout(()=>pushToJSONBin(),1500); }
 async function pushToJSONBin() {
-  if (isSyncing || !navigator.onLine) return;
-  isSyncing = true;
-  const el = document.getElementById('saveIndicator');
-  el.textContent = 'Syncing…';
+  if(isSyncing||!navigator.onLine) return; isSyncing=true;
+  const el=document.getElementById('saveIndicator'); el.textContent='Syncing…';
   try {
-    const payload = buildSyncPayload();
-    await fetch(BIN_URL, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': MASTER_KEY
-      },
-      body: JSON.stringify(payload)
-    });
-    pendingSave = false;
-    el.textContent = '✓ Synced';
-    clearTimeout(el._st);
-    el._st = setTimeout(() => el.textContent = 'Saved', 2000);
-  } catch(err) {
-    el.textContent = '⚠ Sync failed';
-    clearTimeout(el._st);
-    el._st = setTimeout(() => el.textContent = 'Saved', 2000);
-  }
-  isSyncing = false;
+    await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':MASTER_KEY},body:JSON.stringify(buildSyncPayload())});
+    pendingSave=false; el.textContent='✓ Synced'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',2000);
+  } catch(err) { el.textContent='⚠ Sync failed'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',2000); }
+  isSyncing=false;
 }
-
 async function pullFromJSONBin() {
-  if (!navigator.onLine) return;
-  const el = document.getElementById('saveIndicator');
-  el.textContent = 'Syncing…';
+  if(!navigator.onLine) return;
+  const el=document.getElementById('saveIndicator'); el.textContent='Syncing…';
   try {
-    const res = await fetch(BIN_URL + '/latest', {
-      headers: { 'X-Master-Key': MASTER_KEY }
-    });
-    const json = await res.json();
-    const data = json.record || {};
-    // Write all keys from the bin into localStorage
-    Object.keys(data).forEach(key => {
-      if (key.startsWith('wc_')) {
-        localStorage.setItem(key, data[key]);
-      }
-    });
-    el.textContent = '✓ Synced';
-    clearTimeout(el._st);
-    el._st = setTimeout(() => el.textContent = 'Saved', 1500);
-  } catch(err) {
-    el.textContent = 'Offline';
-    clearTimeout(el._st);
-    el._st = setTimeout(() => el.textContent = 'Saved', 1500);
-  }
+    const res=await fetch(BIN_URL+'/latest',{headers:{'X-Master-Key':MASTER_KEY}});
+    const json=await res.json(); const data=json.record||{};
+    Object.keys(data).forEach(k=>{ if(k.startsWith('wc_')) localStorage.setItem(k,data[k]); });
+    el.textContent='✓ Synced'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',1500);
+  } catch(err) { el.textContent='Offline'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',1500); }
 }
+window.addEventListener('online',()=>{ if(pendingSave) pushToJSONBin(); });
 
-// Retry push when back online
-window.addEventListener('online', () => {
-  if (pendingSave) pushToJSONBin();
-});
-
-// ── LOG ───────────────────────────────────────────────────────────────────────
+// ── LOG RENDERING ─────────────────────────────────────────────────────────────
 function renderLog() {
-  Object.values(SECTIONS).forEach(sec => {
-    const c = document.getElementById(sec.containerId); c.innerHTML='';
-    sec.items.forEach(item => {
-      const v=getCount(item.id), pct=Math.min(v/item.goal,1), done=v>=item.goal;
-      const div=document.createElement('div'); div.className='goal-row';
-      div.innerHTML=`
-        <div class="goal-info">
-          <div class="goal-name">${item.name}</div>
-          <div class="goal-meta" id="meta_${item.id}">Goal: ${item.goal} · Week: ${weekTotal(item.id)}</div>
-          <div class="progress-bar"><div class="progress-fill${done?' complete':''}" id="bar_${item.id}" style="width:${pct*100}%"></div></div>
-        </div>
-        <div class="counter">
-          <button class="counter-btn" onclick="adj('${item.id}',-1,${item.goal})">−</button>
-          <span class="counter-val${done?' complete':''}" id="val_${item.id}">${v}</span>
-          <button class="counter-btn" onclick="adj('${item.id}',1,${item.goal})">+</button>
-        </div>`;
-      c.appendChild(div);
-    });
+  // Foundation
+  const fc=document.getElementById('foundation-container'); fc.innerHTML='';
+  FOUNDATION.forEach(item=>{
+    const v=getCount(item.id), pct=Math.min(v/item.goal,1), done=v>=item.goal;
+    const div=document.createElement('div'); div.className='goal-row';
+    div.innerHTML=`
+      <div class="goal-info">
+        <div class="goal-name">${item.name}</div>
+        <div class="goal-meta" id="meta_${item.id}">Goal: ${item.goal} · Week: ${weekTotal(item.id)}</div>
+        <div class="progress-bar"><div class="progress-fill${done?' complete':''}" id="bar_${item.id}" style="width:${pct*100}%"></div></div>
+      </div>
+      <div class="counter">
+        <button class="counter-btn" onclick="adj('${item.id}',-1,${item.goal})">−</button>
+        <span class="counter-val${done?' complete':''}" id="val_${item.id}">${v}</span>
+        <button class="counter-btn" onclick="adj('${item.id}',1,${item.goal})">+</button>
+      </div>`;
+    fc.appendChild(div);
   });
+
+  // Actions
+  const ac=document.getElementById('actions-container'); ac.innerHTML='';
+  ACTIONS.forEach(item=>{
+    const v=getCount(item.id), pct=Math.min(v/item.goal,1), done=v>=item.goal;
+    const div=document.createElement('div'); div.className='goal-row';
+    const badge=item.monthly?`<span class="badge-monthly">Monthly</span>`:'';
+    div.innerHTML=`
+      <div class="goal-info">
+        <div class="goal-name">${item.name}${badge}</div>
+        <div class="goal-meta" id="meta_${item.id}">${item.monthly?'Monthly target: '+item.goal:'Goal: '+item.goal+' · Week: '+weekTotal(item.id)}</div>
+        <div class="progress-bar"><div class="progress-fill${done?' complete':''}" id="bar_${item.id}" style="width:${pct*100}%"></div></div>
+      </div>
+      <div class="counter">
+        <button class="counter-btn" onclick="adj('${item.id}',-1,${item.goal})">−</button>
+        <span class="counter-val${done?' complete':''}" id="val_${item.id}">${v}</span>
+        <button class="counter-btn" onclick="adj('${item.id}',1,${item.goal})">+</button>
+      </div>`;
+    ac.appendChild(div);
+  });
+
+  // Results (track only)
+  const rc=document.getElementById('results-container'); rc.innerHTML='';
+  RESULTS.forEach(item=>{
+    const v=getCount(item.id), wt=weekTotal(item.id);
+    const div=document.createElement('div'); div.className='track-row';
+    div.innerHTML=`
+      <div class="track-info">
+        <div class="track-name">${item.name}</div>
+        <div class="track-meta" id="meta_${item.id}">Today: ${v} · Week total: ${wt}</div>
+      </div>
+      <div class="counter">
+        <button class="counter-btn" onclick="adjTrack('${item.id}',-1)">−</button>
+        <span class="track-val" id="val_${item.id}">${v}</span>
+        <button class="counter-btn" onclick="adjTrack('${item.id}',1)">+</button>
+      </div>`;
+    rc.appendChild(div);
+  });
+
+  // Leverage win toggle
+  const lev=localStorage.getItem(`wc_${dayKey()}_leverage`)||'';
+  ['yes','no','na'].forEach(v=>{
+    const btn=document.getElementById('lev-'+v);
+    btn.className='toggle-btn'+(lev===v?' selected-'+v:'');
+  });
+
+  // Sunday work
+  const sv=getCount('sunday_work');
+  const sel=document.getElementById('sunday-val');
+  sel.textContent=sv; sel.className='sunday-val '+(sv===0?'zero':'nonzero');
 }
 
-function adj(id, delta, goal) {
-  const v = Math.max(0, getCount(id)+delta);
-  setCount(id,v);
+function adj(id,delta,goal) {
+  const v=Math.max(0,getCount(id)+delta); setCount(id,v);
   const done=v>=goal;
-  const el=document.getElementById('val_'+id);
-  if(el){
-    el.textContent=v; el.className='counter-val'+(done?' complete':'');
-    const row=el.closest('.goal-row');
-    const bar=row.querySelector('.progress-fill');
-    bar.style.width=(Math.min(v/goal,1)*100)+'%';
-    bar.className='progress-fill'+(done?' complete':'');
-    document.getElementById('meta_'+id).textContent=`Goal: ${goal} · Week: ${weekTotal(id)}`;
-  }
+  const el=document.getElementById('val_'+id); if(!el) return;
+  el.textContent=v; el.className='counter-val'+(done?' complete':'');
+  const row=el.closest('.goal-row');
+  const bar=row.querySelector('.progress-fill');
+  bar.style.width=(Math.min(v/goal,1)*100)+'%'; bar.className='progress-fill'+(done?' complete':'');
+  const item=[...FOUNDATION,...ACTIONS].find(i=>i.id===id);
+  const meta=document.getElementById('meta_'+id);
+  if(item&&meta) meta.textContent=item.monthly?`Monthly target: ${item.goal}`:`Goal: ${item.goal} · Week: ${weekTotal(id)}`;
   if(document.getElementById('tab-summary').classList.contains('active')) renderSummary();
 }
 
-// ── CALLS ─────────────────────────────────────────────────────────────────────
-let activeCall = null;
+function adjTrack(id,delta) {
+  const v=Math.max(0,getCount(id)+delta); setCount(id,v);
+  const el=document.getElementById('val_'+id); if(el) el.textContent=v;
+  const meta=document.getElementById('meta_'+id); if(meta) meta.textContent=`Today: ${v} · Week total: ${weekTotal(id)}`;
+  if(document.getElementById('tab-summary').classList.contains('active')) renderSummary();
+}
 
+function setLeverage(val) {
+  localStorage.setItem(`wc_${dayKey()}_leverage`, val);
+  ['yes','no','na'].forEach(v=>{
+    document.getElementById('lev-'+v).className='toggle-btn'+(val===v?' selected-'+v:'');
+  });
+  saved(); schedulePush();
+  if(document.getElementById('tab-summary').classList.contains('active')) renderSummary();
+}
+
+function adjSunday(delta) {
+  const v=Math.max(0,getCount('sunday_work')+delta); setCount('sunday_work',v);
+  const el=document.getElementById('sunday-val'); if(el){el.textContent=v; el.className='sunday-val '+(v===0?'zero':'nonzero');}
+}
+
+// ── CALLS ─────────────────────────────────────────────────────────────────────
+let activeCall=null;
 function renderCallsGrid() {
   const grid=document.getElementById('callsGrid'); grid.innerHTML='';
-  for(let i=1;i<=40;i++){
-    const name=callName(i);
-    const t=document.createElement('div');
-    t.className='call-tile'+(name?' filled':'');
-    t.id=`ct_${i}`;
+  for(let i=1;i<=20;i++){
+    const name=callName(i), t=document.createElement('div');
+    t.className='call-tile'+(name?' filled':''); t.id=`ct_${i}`;
     t.innerHTML=`<div class="call-tile-num">${i}</div>${name?`<div class="call-tile-name">${name}</div>`:''}`;
-    t.onclick=()=>openModal(i);
-    grid.appendChild(t);
+    t.onclick=()=>openModal(i); grid.appendChild(t);
   }
   refreshCallsTotal();
 }
-
 function callName(n) { return localStorage.getItem(`wc_cn_${dayKey()}_${n}`)||''; }
-function setCallName(n,v) {
-  if(v.trim()) localStorage.setItem(`wc_cn_${dayKey()}_${n}`,v.trim());
-  else         localStorage.removeItem(`wc_cn_${dayKey()}_${n}`);
-  saved();
-}
-function refreshCallsTotal() {
-  let t=0; for(let i=1;i<=40;i++) if(callName(i)) t++;
-  const el=document.getElementById('callsTotal'); if(el) el.textContent=t;
-  setCount('daily_calls',t);
-}
-function updateCallsHeader() {
-  const el=document.getElementById('callsHeader');
-  if(el) el.textContent=`${DAY_NAMES[selIdx]} call log — tap a number to log a name`;
-}
-
+function setCallName(n,v) { if(v.trim())localStorage.setItem(`wc_cn_${dayKey()}_${n}`,v.trim()); else localStorage.removeItem(`wc_cn_${dayKey()}_${n}`); saved(); schedulePush(); }
+function refreshCallsTotal() { let t=0; for(let i=1;i<=20;i++) if(callName(i)) t++; const el=document.getElementById('callsTotal'); if(el) el.textContent=t; setCount('daily_calls',t); }
+function updateCallsHeader() { const el=document.getElementById('callsHeader'); if(el) el.textContent=`${DAY_NAMES[selIdx]} call log — tap a number to log a name`; }
 function openModal(n) {
-  activeCall=n;
-  document.getElementById('modalTitle').textContent=`Call #${n}`;
+  activeCall=n; document.getElementById('modalTitle').textContent=`Call #${n}`;
   document.getElementById('modalInput').value=callName(n);
   document.getElementById('modalClear').style.display=callName(n)?'block':'none';
   document.getElementById('callModal').classList.add('open');
@@ -500,16 +549,8 @@ function openModal(n) {
 }
 function closeModal() { document.getElementById('callModal').classList.remove('open'); activeCall=null; }
 function bgClick(e) { if(e.target===document.getElementById('callModal')) closeModal(); }
-function saveModal() {
-  if(activeCall===null) return;
-  setCallName(activeCall, document.getElementById('modalInput').value);
-  refreshTile(activeCall); refreshCallsTotal(); closeModal();
-}
-function clearModal() {
-  if(activeCall===null) return;
-  setCallName(activeCall,'');
-  refreshTile(activeCall); refreshCallsTotal(); closeModal();
-}
+function saveModal() { if(activeCall===null) return; setCallName(activeCall,document.getElementById('modalInput').value); refreshTile(activeCall); refreshCallsTotal(); closeModal(); }
+function clearModal() { if(activeCall===null) return; setCallName(activeCall,''); refreshTile(activeCall); refreshCallsTotal(); closeModal(); }
 function refreshTile(n) {
   const name=callName(n), t=document.getElementById(`ct_${n}`); if(!t) return;
   t.className='call-tile'+(name?' filled':'');
@@ -518,89 +559,119 @@ function refreshTile(n) {
 }
 
 // ── SUMMARY ───────────────────────────────────────────────────────────────────
-function findItem(id) {
-  for(const s of Object.values(SECTIONS)){ const f=s.items.find(i=>i.id===id); if(f) return f; }
-}
 function renderSummary() {
-  const grid=document.getElementById('kpiGrid'); grid.innerHTML='';
-  KPI_IDS.forEach(id=>{
-    const item=findItem(id); if(!item) return;
-    const wt=weekTotal(id);
-    const c=document.createElement('div'); c.className='kpi-card';
-    c.innerHTML=`<div class="kpi-label">${item.name}</div><div class="kpi-value">${wt}</div><div class="kpi-goal">Goal: ${item.goal}</div>`;
-    grid.appendChild(c);
+  // Foundation
+  const fc=document.getElementById('sum-foundation');
+  const ft=fc.querySelector('.summary-title'); fc.innerHTML=''; fc.appendChild(ft);
+  FOUNDATION.forEach(item=>{
+    const wt=weekTotal(item.id), pct=Math.round(wt/item.goal*100);
+    const row=document.createElement('div'); row.className='summary-row';
+    row.innerHTML=`<span class="summary-item">${item.name}</span><div class="summary-vals"><span class="summary-count">${wt}</span><span class="summary-goal">/ ${item.goal}</span><span class="pct-badge${pct>=100?' good':''}">${pct}%</span></div>`;
+    fc.appendChild(row);
   });
-  Object.values(SECTIONS).forEach(sec=>{
-    const card=document.getElementById(sec.summaryId);
-    const title=card.querySelector('.summary-title');
-    card.innerHTML=''; card.appendChild(title);
-    sec.items.forEach(item=>{
-      const wt=weekTotal(item.id), pct=Math.round(wt/item.goal*100);
-      const row=document.createElement('div'); row.className='summary-row';
-      row.innerHTML=`
-        <span class="summary-item">${item.name}</span>
-        <div class="summary-vals">
-          <span class="summary-count">${wt}</span>
-          <span class="summary-goal">/ ${item.goal}</span>
-          <span class="pct-badge${pct>=100?' good':''}">${pct}%</span>
-        </div>`;
-      card.appendChild(row);
-    });
+
+  // Actions
+  const ac=document.getElementById('sum-actions');
+  const at=ac.querySelector('.summary-title'); ac.innerHTML=''; ac.appendChild(at);
+  ACTIONS.forEach(item=>{
+    const wt=weekTotal(item.id), pct=Math.round(wt/item.goal*100);
+    const badge=item.monthly?` <span class="badge-monthly">Monthly</span>`:'';
+    const row=document.createElement('div'); row.className='summary-row';
+    row.innerHTML=`<span class="summary-item">${item.name}${badge}</span><div class="summary-vals"><span class="summary-count">${wt}</span><span class="summary-goal">/ ${item.goal}</span><span class="pct-badge${pct>=100?' good':''}">${pct}%</span></div>`;
+    ac.appendChild(row);
   });
+
+  // Results (no pct, just totals)
+  const rc=document.getElementById('sum-results');
+  const rt=rc.querySelector('.summary-title'); rc.innerHTML=''; rc.appendChild(rt);
+  RESULTS.forEach(item=>{
+    const wt=weekTotal(item.id);
+    const row=document.createElement('div'); row.className='summary-row';
+    row.innerHTML=`<span class="summary-item">${item.name}</span><div class="summary-vals"><span class="track-badge">${wt}</span></div>`;
+    rc.appendChild(row);
+  });
+
+  // Leverage
+  const lc=document.getElementById('sum-leverage');
+  const lt=lc.querySelector('.summary-title'); lc.innerHTML=''; lc.appendChild(lt);
+  let yesCount=0, noCount=0, naCount=0;
+  for(let i=0;i<5;i++){
+    const k=`wc_${iso(dayDate(i))}_leverage`;
+    const v=localStorage.getItem(k)||'';
+    if(v==='yes') yesCount++; else if(v==='no') noCount++; else if(v==='na') naCount++;
+  }
+  const sundayWt=weekTotal('sunday_work');
+  const levRow=document.createElement('div'); levRow.className='summary-row';
+  levRow.innerHTML=`<span class="summary-item">Leverage Wins</span><div class="summary-vals"><span class="track-badge" style="color:var(--green)">✓ ${yesCount}</span><span class="summary-goal">No: ${noCount} · N/A: ${naCount}</span></div>`;
+  lc.appendChild(levRow);
+  const sunRow=document.createElement('div'); sunRow.className='summary-row';
+  sunRow.innerHTML=`<span class="summary-item">Sunday Work</span><div class="summary-vals"><span class="track-badge" style="color:${sundayWt===0?'var(--green)':'var(--red)'}">${sundayWt===0?'Protected ✓':sundayWt+' sessions'}</span></div>`;
+  lc.appendChild(sunRow);
 }
 
 // ── EMAIL ─────────────────────────────────────────────────────────────────────
 function emailSummary() {
   const mon=getMonday(weekOffset), fri=dayDate(4);
   const ws=`${fmt(mon)} – ${fmt(fri)}`;
-  let body=`Weekly Compass Summary — ${ws}\nCory Barnes | Integrity Home Mortgage | NMLS #2630832\n\n`;
-  Object.entries(SECTIONS).forEach(([key,sec])=>{
-    const label = key.charAt(0).toUpperCase() + key.slice(1);
-    body+=`── ${label} ──\n`;
-    sec.items.forEach(item=>{
-      const wt=weekTotal(item.id), pct=Math.round(wt/item.goal*100);
-      body+=`${item.name}: ${wt} / ${item.goal} (${pct}%)\n`;
-    });
-    body+='\n';
-  });
-  const wins=document.getElementById('winsText').value;
-  const losses=document.getElementById('lossesText').value;
-  if(wins)   body+=`WINS\n${wins}\n\n`;
-  if(losses) body+=`LOSSES & LESSONS\n${losses}\n\n`;
+  let body=`Weekly Compass — ${ws}\nCory Barnes | Integrity Home Mortgage | NMLS #2630832\n\n`;
+
+  body+=`── FOUNDATION ──\n`;
+  FOUNDATION.forEach(i=>{ body+=`${i.name}: ${weekTotal(i.id)} / ${i.goal}\n`; });
+
+  body+=`\n── HIGH-VALUE ACTIONS ──\n`;
+  ACTIONS.forEach(i=>{ body+=`${i.name}${i.monthly?' (Monthly)':''}: ${weekTotal(i.id)} / ${i.goal}\n`; });
+
+  body+=`\n── RESULTS ──\n`;
+  RESULTS.forEach(i=>{ body+=`${i.name}: ${weekTotal(i.id)}\n`; });
+
+  let yesCount=0, noCount=0, naCount=0;
+  for(let i=0;i<5;i++){const v=localStorage.getItem(`wc_${iso(dayDate(i))}_leverage`)||''; if(v==='yes')yesCount++; else if(v==='no')noCount++; else if(v==='na')naCount++;}
+  body+=`\n── LEVERAGE ──\nLeverage Wins: ${yesCount} | No: ${noCount} | N/A: ${naCount}\nSunday Work: ${weekTotal('sunday_work')}\n`;
+
+  const bw=document.getElementById('biggestWin').value;
+  const cv=document.getElementById('createdValue').value;
+  const el=document.getElementById('eliminateText').value;
+  const na=document.getElementById('nextWeekAdj').value;
+  body+=`\n── WINS & LESSONS ──\n`;
+  if(bw) body+=`Biggest Win: ${bw}\n`;
+  if(cv) body+=`Created Value: ${cv}\n`;
+  if(el) body+=`Eliminate/Delegate/Automate: ${el}\n`;
+  if(na) body+=`Next Week Adjustment: ${na}\n`;
+
   window.location.href=`mailto:jsweat@ihmcloans.com?subject=${encodeURIComponent('Weekly Compass – '+ws)}&body=${encodeURIComponent(body)}`;
 }
 
 // ── WINS ──────────────────────────────────────────────────────────────────────
 function saveWins() {
-  const wins   = document.getElementById('winsText').value;
-  const losses = document.getElementById('lossesText').value;
-  localStorage.setItem(`wc_wins_${weekKey()}`,   wins);
-  localStorage.setItem(`wc_losses_${weekKey()}`, losses);
-  saved();
-  schedulePush();
+  localStorage.setItem(`wc_win1_${weekKey()}`, document.getElementById('biggestWin').value);
+  localStorage.setItem(`wc_win2_${weekKey()}`, document.getElementById('createdValue').value);
+  localStorage.setItem(`wc_win3_${weekKey()}`, document.getElementById('eliminateText').value);
+  localStorage.setItem(`wc_win4_${weekKey()}`, document.getElementById('nextWeekAdj').value);
+  saved(); schedulePush();
 }
 function loadWins() {
-  document.getElementById('winsText').value   = localStorage.getItem(`wc_wins_${weekKey()}`)   || '';
-  document.getElementById('lossesText').value = localStorage.getItem(`wc_losses_${weekKey()}`) || '';
+  document.getElementById('biggestWin').value   = localStorage.getItem(`wc_win1_${weekKey()}`) || '';
+  document.getElementById('createdValue').value  = localStorage.getItem(`wc_win2_${weekKey()}`) || '';
+  document.getElementById('eliminateText').value = localStorage.getItem(`wc_win3_${weekKey()}`) || '';
+  document.getElementById('nextWeekAdj').value   = localStorage.getItem(`wc_win4_${weekKey()}`) || '';
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────────────
-function switchTab(name, btn) {
+function switchTab(name,btn) {
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  btn.classList.add('active');
-  document.getElementById('emailBtnWrap').style.display = name==='summary'?'block':'none';
-  if(name==='calls')   { renderCallsGrid(); updateCallsHeader(); }
+  document.getElementById('tab-'+name).classList.add('active'); btn.classList.add('active');
+  document.getElementById('emailBtnWrap').style.display=name==='summary'?'block':'none';
+  if(name==='calls'){renderCallsGrid();updateCallsHeader();}
   if(name==='summary') renderSummary();
-  if(name==='wins')    loadWins();
+  if(name==='wins') loadWins();
 }
 
 function installApp() { alert('To install: tap the Share button (□↑) in Safari, then "Add to Home Screen".'); }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
 renderHeader();
-pullFromJSONBin().then(() => renderLog());
+pullFromJSONBin().then(()=>renderLog());
 </script>
 </body>
 </html>
