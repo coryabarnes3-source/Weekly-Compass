@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
 <title>Weekly Compass</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
@@ -163,11 +162,21 @@
   .modal-save   { flex: 1; padding: 13px; background: var(--blue); color: #fff; border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; }
   .modal-cancel { flex: 1; padding: 13px; background: var(--gray-100); color: var(--gray-700); border: none; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; }
   .modal-clear  { width: 100%; padding: 13px; background: transparent; color: var(--red); border: none; font-family: 'DM Sans', sans-serif; font-size: 14px; cursor: pointer; margin-top: 6px; }
+
+:root { --blue:#122D3D; --blue-light:#F6F2E9; }
+body {background:#F6F2E9;max-width:640px;} .header{position:static;background:#F6F2E9;} .tabs{top:0;} .email-btn-wrap{max-width:640px;background:linear-gradient(to top,#F6F2E9 65%,transparent)}
+.header-top h1{font-size:29px;color:#122D3D}.draft-note{font-size:12px;padding:10px 20px;color:#53636C;background:#fff;border-bottom:1px solid #E5E7EB;line-height:1.5}.save-indicator{position:static;text-align:right;padding:8px 16px;background:#F6F2E9;font-size:11px}
+.check-card {background:#fff;padding:18px;border-radius:12px;margin-bottom:12px;border:1px solid #E5E7EB;}
+.check-card h2{font-size:19px;color:#122D3D;font-weight:600;margin-bottom:6px}.check-card h3{font-size:15px;margin:12px 0 5px}.check-card p,.hint{font-size:12px;color:#53636C;line-height:1.6;margin-bottom:10px}
+.check-card label {display:block;font-size:13px;color:#374151;margin:10px 0 5px}.check-card textarea,.check-card input:not([type=checkbox]),.check-card select {font:inherit;font-size:14px;width:100%;padding:10px;border:1px solid #CAD3D5;border-radius:7px;background:white;color:#122D3D;min-width:0;}
+.check-card textarea{min-height:70px;resize:vertical;line-height:1.5}.priority-line{display:grid;grid-template-columns:minmax(0,1fr) 120px;gap:8px;margin:8px 0}.check-card .checkbox{display:flex;gap:9px;align-items:center;line-height:1.6}.checkbox input{width:17px;height:17px;flex-shrink:0;accent-color:#122D3D}.eyebrow{font-size:10px;letter-spacing:1px;color:#9A6F30;font-weight:700;text-transform:uppercase;margin-bottom:7px}.light-button{padding:8px 12px;border:1px solid #CAD3D5;border-radius:7px;background:#F6F2E9;color:#122D3D;cursor:pointer;font:inherit;font-size:12px}.daily-entry{border-bottom:1px solid #eee;padding:12px 0}.daily-entry p{white-space:pre-wrap;color:#374151;font-size:14px;margin:7px 0}.metrics summary{padding:12px 4px;cursor:pointer;font-weight:600;color:#122D3D}.coach-preview{width:calc(100% - 30px);max-width:600px;border:1px solid #CAD3D5;border-radius:12px;margin:auto;padding:20px}.coach-preview::backdrop{background:#122D3D99}.coach-preview textarea{width:100%;height:55vh;margin:12px 0;font:13px monospace;padding:12px}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid #B98A43;outline-offset:2px}.email-btn{box-shadow:none}.week-nav button{min-width:34px}
+@media(max-width:400px){.header-top{align-items:flex-start;gap:12px;flex-direction:column}.priority-line{grid-template-columns:minmax(0,1fr) 100px}}
+
 </style>
 </head>
 <body>
 
-<div class="save-indicator" id="saveIndicator">Saved</div>
+<div class="save-indicator" id="saveIndicator" role="status">Saved on this device</div>
 
 <div class="header">
   <div class="header-top">
@@ -181,6 +190,7 @@
   <div class="day-strip" id="dayStrip"></div>
 </div>
 
+
 <div class="profile-bar">
   <div class="avatar">CB</div>
   <div class="profile-info">
@@ -193,16 +203,30 @@
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('log',this)">Log</button>
+  <button class="tab active" onclick="switchTab('log',this)">Today</button>
   <button class="tab" onclick="switchTab('calls',this)">Calls</button>
   <button class="tab" onclick="switchTab('summary',this)">Summary</button>
-  <button class="tab" onclick="switchTab('wins',this)">Wins</button>
+  <button class="tab" onclick="switchTab('wins',this)">Review</button>
 </div>
 
 <div class="content">
 
   <!-- LOG TAB -->
   <div class="tab-content active" id="tab-log">
+<div class="check-card">
+ <div class="eyebrow">Daily check-in · Private</div><h2>Choose a meaningful day.</h2><p>Use this space in place of the daily worksheet. Your activity counts stay below.</p>
+ <label for="daily-gratitude">Start with gratitude</label><textarea id="daily-gratitude" data-daily="gratitude" placeholder="Up to three good things from the last 24 hours..."></textarea>
+ <h3>Choose what matters</h3><p>One main priority. Up to two supporting steps. These are focus notes; keep task details in Todoist.</p>
+<div class="priority-line"><input id="daily-priority1" data-daily="priority1" aria-label="Priority 1" placeholder="Main priority"><input data-daily="time1" aria-label="Time block 1" placeholder="Time block"></div><div class="priority-line"><input id="daily-priority2" data-daily="priority2" aria-label="Priority 2" placeholder="Supporting step 2"><input data-daily="time2" aria-label="Time block 2" placeholder="Time block"></div><div class="priority-line"><input id="daily-priority3" data-daily="priority3" aria-label="Priority 3" placeholder="Supporting step 3"><input data-daily="time3" aria-label="Time block 3" placeholder="Time block"></div><label class="checkbox"><input type="checkbox" data-daily="time_reserved">I reserved the time in my calendar.</label>
+<label class="checkbox"><input type="checkbox" data-daily="home_protected">I protected time for home and renewal.</label></div>
+<div class="check-card"><div class="eyebrow">Evening reset · Private</div><h2>Celebrate the progress.</h2>
+<label for="daily-wins">Today's wins</label><textarea id="daily-wins" data-daily="wins" placeholder="A step taken. Someone helped. A promise kept. Up to three wins."></textarea>
+<label class="checkbox"><input type="checkbox" data-daily="noticed_good">I named one good thing.</label>
+<label class="checkbox"><input type="checkbox" data-daily="tomorrow_reviewed">I looked at tomorrow.</label>
+<label class="checkbox"><input type="checkbox" data-daily="permission_stop">I gave myself permission to stop.</label>
+<label for="tomorrow-step">Tomorrow's first meaningful step</label><input id="tomorrow-step" data-daily="tomorrow" placeholder="One clear next step..."></div>
+<details class="metrics"><summary>Activity & results · existing Compass scorecard</summary>
+
 
     <div class="section-label">Foundation</div>
     <div id="foundation-container"></div>
@@ -239,14 +263,14 @@
       </div>
     </div>
 
-  </div>
+  </details></div>
 
   <!-- CALLS TAB -->
   <div class="tab-content" id="tab-calls">
     <div class="calls-total-card">
       <div class="calls-total-num" id="callsTotal">0</div>
       <div class="calls-total-label">Proactive Calls Today</div>
-      <div class="calls-goal-note">Relationship & Pipeline Calls</div>
+      <div class="calls-goal-note">Relationship & Pipeline Calls · Up to 30 per day</div>
     </div>
     <p class="calls-header" id="callsHeader">Mon call log — tap a number to log a name</p>
     <div class="calls-grid" id="callsGrid"></div>
@@ -265,7 +289,9 @@
   </div>
 
   <!-- WINS TAB -->
-  <div class="tab-content" id="tab-wins">
+  <div class="tab-content" id="tab-wins"><div class="check-card"><div class="eyebrow">Weekly direction · Private</div><h2>Two outcomes for this week.</h2><label for="weekly-business">Business outcome</label><input id="weekly-business" data-weekly="business" placeholder="What would make this a useful week?"><label for="weekly-personal">Personal outcome</label><input id="weekly-personal" data-weekly="personal" placeholder="What deserves protected time?"></div>
+<div class="check-card"><div class="eyebrow">Saved daily wins · Private</div><h2>Review what moved forward.</h2><p>Use a daily win in the existing Biggest Win field when you want it included in the coach summary. Personal reflections stay here.</p><div id="daily-win-rollup"></div></div>
+<div class="hint" style="padding:8px 4px">Coach summary fields below · Review these before sharing.</div>
     <div class="wins-input-area">
       <div class="wins-label">Biggest Win</div>
       <input class="wins-single" type="text" id="biggestWin" placeholder="What was your biggest win this week?" oninput="saveWins()">
@@ -286,15 +312,17 @@
 
 </div>
 
+<div class="app-footer" style="text-align:center;font-size:11px;color:var(--gray-400);padding:0 16px 140px;margin-top:-110px"><button class="light-button" onclick="downloadBackup()">Download backup</button> <button class="light-button" onclick="setSyncKey()">Sync key</button><div style="margin-top:8px" id="appVersion">Weekly Compass v2026-11-17</div></div>
+
 <!-- Floating email button (summary tab only) -->
 <div class="email-btn-wrap" id="emailBtnWrap">
   <button class="email-btn" onclick="emailSummary()">
     <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
       <path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/>
     </svg>
-    Email summary to coach
+    Preview coach summary
   </button>
-  <div class="email-sub-note">Sends to jsweat@ihmcloans.com</div>
+  <div class="email-sub-note">Review first. Private daily reflections are excluded.</div>
 </div>
 
 <!-- Call name modal -->
@@ -360,7 +388,7 @@ function weekKey() { return iso(getMonday(weekOffset)); }
 function changeWeek(dir) {
   weekOffset+=dir; renderHeader(); renderLog();
   if(document.getElementById('tab-summary').classList.contains('active')) renderSummary();
-  loadWins();
+  loadWins(); loadDaily(); renderDailyWins(); renderCallsGrid(); updateCallsHeader();
 }
 
 // ── HEADER ────────────────────────────────────────────────────────────────────
@@ -372,14 +400,35 @@ function renderHeader() {
     const d=dayDate(i), b=document.createElement('button');
     b.className='day-btn'+(i===selIdx?' active':'');
     b.innerHTML=`<span class="day-name">${n}</span><span class="day-num">${d.getDate()}</span>`;
-    b.onclick=()=>{ selIdx=i; renderHeader(); renderLog(); updateCallsHeader(); };
+    b.onclick=()=>{ selIdx=i; renderHeader(); renderLog(); updateCallsHeader(); renderCallsGrid(); loadDaily(); };
     strip.appendChild(b);
   });
 }
 
 // ── JSONBIN SYNC ──────────────────────────────────────────────────────────────
 const BIN_ID     = '69e64707aaba8821971bfbcc';
-const MASTER_KEY = '$2a$10$tPxPwK3CfBx1eP1MEqOYAO5XH0h640CPm9klAAVAjqueJAkmRISm.';
+// The sync key is NOT stored in this page. Each device asks for it once and keeps it
+// in that device's own storage (name not starting with wc_, so it is never synced or backed up).
+const KEY_STORE  = 'compass_sync_key';
+function syncKey(){ try{ return localStorage.getItem(KEY_STORE)||''; }catch{ return ''; } }
+function setSyncKey(){
+  const k=prompt('Paste your Compass sync key (from JSONBin → API Keys).\nYou only do this once on each device.', '');
+  if(k===null) return false;
+  const v=k.trim(); if(!v) return false;
+  try{ localStorage.setItem(KEY_STORE,v); }catch{ alert('This browser would not save the key.'); return false; }
+  pullFromJSONBin().then(()=>{ renderLog(); loadDaily(); loadWeekly(); loadWins(); renderDailyWins(); });
+  return true;
+}
+// One-time: make the JSONBin bin private (the dashboard has no toggle). Runs after a
+// successful sync on any device until it succeeds once on that device.
+async function ensureBinPrivate(){
+  try{ if(localStorage.getItem('compass_bin_private')==='1') return; }catch{ return; }
+  try{
+    const res=await fetch(BIN_URL+'/meta/privacy',{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':syncKey(),'X-Bin-Private':'true'},body:'{}'});
+    if(res.ok){ localStorage.setItem('compass_bin_private','1'); const el=document.getElementById('saveIndicator'); el.textContent='✓ Synced · bin private'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',3000); }
+  }catch{}
+}
+function syncOff(msg){ const el=document.getElementById('saveIndicator'); el.textContent=msg||'Sync off — add key'; }
 const BIN_URL    = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 let isSyncing=false, pendingSave=false, saveTimer=null;
 
@@ -397,25 +446,40 @@ function buildSyncPayload() {
 }
 function schedulePush() { pendingSave=true; clearTimeout(saveTimer); saveTimer=setTimeout(()=>pushToJSONBin(),1500); }
 async function pushToJSONBin() {
+  if(!syncKey()) { syncOff(); return; }
   if(isSyncing||!navigator.onLine) return; isSyncing=true;
   const el=document.getElementById('saveIndicator'); el.textContent='Syncing…';
   try {
-    await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':MASTER_KEY},body:JSON.stringify(buildSyncPayload())});
+    const res=await fetch(BIN_URL,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':syncKey()},body:JSON.stringify(buildSyncPayload())});
+    if(res.status===401||res.status===403){ isSyncing=false; syncOff('⚠ Sync key not accepted'); return; }
+    if(!res.ok) throw new Error('HTTP '+res.status);
     pendingSave=false; el.textContent='✓ Synced'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',2000);
   } catch(err) { el.textContent='⚠ Sync failed'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',2000); }
   isSyncing=false;
 }
 async function pullFromJSONBin() {
+  if(!syncKey()) { syncOff(); return; }
   if(!navigator.onLine) return;
   const el=document.getElementById('saveIndicator'); el.textContent='Syncing…';
   try {
-    const res=await fetch(BIN_URL+'/latest',{headers:{'X-Master-Key':MASTER_KEY}});
+    const res=await fetch(BIN_URL+'/latest',{headers:{'X-Master-Key':syncKey()}});
+    if(res.status===401||res.status===403){ syncOff('⚠ Sync key not accepted'); return; }
+    if(!res.ok) throw new Error('HTTP '+res.status);
     const json=await res.json(); const data=json.record||{};
     Object.keys(data).forEach(k=>{ if(k.startsWith('wc_')) localStorage.setItem(k,data[k]); });
     el.textContent='✓ Synced'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',1500);
+    ensureBinPrivate();
   } catch(err) { el.textContent='Offline'; clearTimeout(el._st); el._st=setTimeout(()=>el.textContent='Saved',1500); }
 }
 window.addEventListener('online',()=>{ if(pendingSave) pushToJSONBin(); });
+
+// ── BACKUP ────────────────────────────────────────────────────────────────────
+function downloadBackup() {
+  const blob=new Blob([JSON.stringify(buildSyncPayload(),null,1)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='compass-backup-'+iso(new Date())+'.json'; document.body.appendChild(a); a.click();
+  setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();},500);
+}
 
 // ── LOG RENDERING ─────────────────────────────────────────────────────────────
 function renderLog() {
@@ -528,7 +592,7 @@ function adjSunday(delta) {
 let activeCall=null;
 function renderCallsGrid() {
   const grid=document.getElementById('callsGrid'); grid.innerHTML='';
-  for(let i=1;i<=20;i++){
+  for(let i=1;i<=30;i++){
     const name=callName(i), t=document.createElement('div');
     t.className='call-tile'+(name?' filled':''); t.id=`ct_${i}`;
     t.innerHTML=`<div class="call-tile-num">${i}</div>${name?`<div class="call-tile-name">${name}</div>`:''}`;
@@ -538,7 +602,7 @@ function renderCallsGrid() {
 }
 function callName(n) { return localStorage.getItem(`wc_cn_${dayKey()}_${n}`)||''; }
 function setCallName(n,v) { if(v.trim())localStorage.setItem(`wc_cn_${dayKey()}_${n}`,v.trim()); else localStorage.removeItem(`wc_cn_${dayKey()}_${n}`); saved(); schedulePush(); }
-function refreshCallsTotal() { let t=0; for(let i=1;i<=20;i++) if(callName(i)) t++; const el=document.getElementById('callsTotal'); if(el) el.textContent=t; setCount('daily_calls',t); }
+function refreshCallsTotal() { let t=0; for(let i=1;i<=30;i++) if(callName(i)) t++; const el=document.getElementById('callsTotal'); if(el) el.textContent=t; setCount('daily_calls',t); }
 function updateCallsHeader() { const el=document.getElementById('callsHeader'); if(el) el.textContent=`${DAY_NAMES[selIdx]} call log — tap a number to log a name`; }
 function openModal(n) {
   activeCall=n; document.getElementById('modalTitle').textContent=`Call #${n}`;
@@ -638,7 +702,7 @@ function emailSummary() {
   if(el) body+=`Eliminate/Delegate/Automate: ${el}\n`;
   if(na) body+=`Next Week Adjustment: ${na}\n`;
 
-  window.location.href=`mailto:jsweat@ihmcloans.com?subject=${encodeURIComponent('Weekly Compass – '+ws)}&body=${encodeURIComponent(body)}`;
+  document.getElementById('coachText').value=body; document.getElementById('coachPreview').showModal();
 }
 
 // ── WINS ──────────────────────────────────────────────────────────────────────
@@ -663,15 +727,28 @@ function switchTab(name,btn) {
   document.getElementById('tab-'+name).classList.add('active'); btn.classList.add('active');
   document.getElementById('emailBtnWrap').style.display=name==='summary'?'block':'none';
   if(name==='calls'){renderCallsGrid();updateCallsHeader();}
-  if(name==='summary') renderSummary();
-  if(name==='wins') loadWins();
+  if(name==='summary') {renderSummary();}
+  if(name==='wins') {loadWins(); loadWeekly(); renderDailyWins();}
 }
 
 function installApp() { alert('To install: tap the Share button (□↑) in Safari, then "Add to Home Screen".'); }
 
+
+function dailyData(date=dayKey()){try{return JSON.parse(localStorage.getItem(`wc_daily_${date}`)||'{}')}catch{return {}}}
+function saveDaily(){const data=dailyData(); document.querySelectorAll('[data-daily]').forEach(el=>{data[el.dataset.daily]=el.type==='checkbox'?el.checked:el.value;});localStorage.setItem(`wc_daily_${dayKey()}`,JSON.stringify(data)); saved(); schedulePush();}
+function loadDaily(){const data=dailyData();document.querySelectorAll('[data-daily]').forEach(el=>{if(el.type==='checkbox')el.checked=data[el.dataset.daily]===true;else el.value=data[el.dataset.daily]??'';});}
+function saveWeekly(){const data={};document.querySelectorAll('[data-weekly]').forEach(el=>data[el.dataset.weekly]=el.value);localStorage.setItem(`wc_direction_${weekKey()}`,JSON.stringify(data));saved();schedulePush();}
+function loadWeekly(){let data={};try{data=JSON.parse(localStorage.getItem(`wc_direction_${weekKey()}`)||'{}')}catch{}document.querySelectorAll('[data-weekly]').forEach(el=>el.value=data[el.dataset.weekly]||'');}
+function renderDailyWins(){loadWeekly();const box=document.getElementById('daily-win-rollup');box.replaceChildren();let found=false;for(let i=0;i<5;i++){const d=dailyData(iso(dayDate(i)));if(!(d.wins||'').trim())continue;found=true;const row=document.createElement('div');row.className='daily-entry';const day=document.createElement('strong');day.textContent=DAY_NAMES[i]+' · '+fmt(dayDate(i));const p=document.createElement('p');p.textContent=d.wins;const b=document.createElement('button');b.className='light-button';b.textContent='Use as weekly Biggest Win';b.onclick=()=>{const target=document.getElementById('biggestWin');if(target.value&&target.value!==d.wins&&!confirm('Replace the current weekly Biggest Win with this daily win?'))return;target.value=d.wins;saveWins();target.focus();};row.append(day,p,b);box.append(row);}if(!found){const p=document.createElement('p');p.textContent='Daily wins will appear here as you record them. No separate weekly recap needed.';box.append(p);}}
+document.querySelectorAll('[data-daily]').forEach(el=>el.addEventListener('input',saveDaily));
+document.querySelectorAll('[data-weekly]').forEach(el=>el.addEventListener('input',saveWeekly));
+function emailCoach(){const mon=getMonday(weekOffset),fri=dayDate(4);const ws=`${fmt(mon)} – ${fmt(fri)}`;window.location.href=`mailto:jsweat@ihmcloans.com?subject=${encodeURIComponent('Weekly Compass – '+ws)}&body=${encodeURIComponent(document.getElementById('coachText').value)}`;}
+async function copyCoachSummary(){try{await navigator.clipboard.writeText(document.getElementById('coachText').value);document.getElementById('copyStatus').textContent='Copied';}catch{document.getElementById('coachText').select();document.getElementById('copyStatus').textContent='Select and copy the text.';}}
+
 // ── INIT ──────────────────────────────────────────────────────────────────────
-renderHeader();
-pullFromJSONBin().then(()=>renderLog());
+renderHeader(); renderLog(); loadDaily(); loadWeekly(); loadWins(); renderDailyWins();
+if(syncKey()) { pullFromJSONBin().then(()=>{ renderLog(); loadDaily(); loadWeekly(); loadWins(); renderDailyWins(); }); }
+else { syncOff(); setTimeout(()=>{ setSyncKey(); }, 400); }
 </script>
-</body>
+<dialog id="coachPreview" class="coach-preview"><h2>Coach summary preview</h2><p class="hint">Includes existing business metrics and curated weekly review. Daily gratitude, priorities, personal outcomes, and reset entries are excluded.</p><textarea id="coachText" aria-label="Coach summary" readonly></textarea><button class="light-button" onclick="emailCoach()">Email to coach</button> <button class="light-button" onclick="copyCoachSummary()">Copy summary</button> <button class="light-button" onclick="document.getElementById('coachPreview').close()">Close</button> <span id="copyStatus" role="status"></span></dialog></body>
 </html>
